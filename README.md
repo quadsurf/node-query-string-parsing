@@ -1,78 +1,53 @@
-# Parsing Query String Parameters
+# node-url-parsing
+Parsing URLs is a fundamental process of web servers. In regards to Node.js, you have the option to manually parse a URL with the `req.url` property or require [`Node's url module`](https://www.npmjs.com/package/url). To gain an appreciation and understanding of the `url` module, which offers many conveniences, we're going to use `req.url`re-implement two of its most common properties:
 
-Please read through this entire document first, then return to the beginning to complete the exercise.
+- pathname
+- query
 
-## Setting the stage (What and Why)
+## Setup
+This exercise will involve your HTTP server to be frequently restarted. Rather than manually doing this, we're going to automate this process using [`nodemon`](https://www.npmjs.com/package/nodemon).
 
-The goal of this exercise is something that seems simple, but has some latent complexity; parsing URLs. As previously mentioned, HTTP is a String-based protocol, so this lesson will challenge you to work with strings using all of your previous acquired tools/skills.
+To install nodemon, type the following command into your terminal:
 
-Why is parsing an HTTP request useful? This is great practice with understanding where some of the complexity of the web lies. After completing this exercise you will have exposure to a subset of the problems around URL parsing, this will give you greater appreciation for the [`url`](https://www.npmjs.com/package/url) npm module.
+```bash
+npm install -g nodemon
+```
 
-## Educational Objectives
+## Instructions
+A lot of experimentation will be performed during this exercise. Since the focus of the exercise is URLs and not creating an HTTP server, the code for a basic server has been written for you in [`server.js`](server.js). To start the server, type the following command: 
 
-- Describe what a path is and how one would extract it from the request string
-- Describe how to send query parameters in a URL (?foo=bar&baz=foo)
-- Describe how to interact with url-encoded parameters
+```bash
+nodemon server.js
+```
 
-## Key terms:
+As you complete each of the following steps, add and commit your work to Github.
 
-- `http` npm module
-- path
-- query string
+#### Step 1: `pathname`
+The first step is to experiment with the path of a URL. In [`server.js`](server.js), pass an argument of [`req.url`](https://nodejs.org/api/http.html#http_message_url) to `res.end()`.
 
-## Educational Activities
+- Open a browser and navigate to `localhost:8000`. Notice the output.
+- Change the URL in the address bar of your web browser to a different URL, such as `localhost:8000/foo`. View the output displayed in your browser.
+- Notice that adding a query string will display the path and the query string.
+- Create an object named `url-two`; then  add a property named `pathname`. 
+- Replace `res.end(req.url)` with `res.end(url-two.pathname)`
+- If your browser displays the path of a url, then everything works. `localhost:8000/bar?name=batman`, for instance, would return "/bar"
+- Add and commit to Github your changes in `server.js`.
 
-Before proceeding, `npm install -g nodemon`.
+#### Step 2: `query`
+The second step is to experiment with the [query string](https://en.wikipedia.org/wiki/Query_string) of a URL.
 
-Much of this activity will be done via experimentation, so the "coding task" is inline here. A [`server.js`](server.js) file has been provided for you to conduct the experiments in. To run the file, use `nodemon server.js`.
+- Open a browser and navigate to `localhost:8000/report?happy=yes`. Your browser will display the string `/?happy=yes`
+- Inside of `server.js`, replace `res.end(url-two.pathname)` with `res.end(url-two.query)`
+- The property `queryString` doesn't exist, and you'll have to implement it to return an object with the parameter name as a key and its value as the corresponding value. In other words, we want to view `{happy: yes}`.
+- Once you've solved this problem, re-implement your solution to handle a query string with more than one parameter and value, such as `?city=philly&state=pa`.
+- Add and commit your work.
 
-As you complete each phase of this experiment, make a commit before continuing onwards:
+#### Step 3: `query` with encoded URL 
+The third step is to experiment with an encoded URL and query strings. 
 
-  1. Begin by using `res.end` to see the value of [`req.url`](https://nodejs.org/api/http.html#http_message_url) when requesting various URLs, perhaps `localhost:8000/foo` and `localhost:8000/bar`. Replace the string in `res.end` inside of `server.js` with the `req.url` with the leading slash removed. Make a commit with this new output. You will be able to see the output by refreshing the page in the browser.
-  1. Next, try a URL that has a [query string parameter](https://en.wikipedia.org/wiki/Query_string). Here are the test cases you should try: `localhost:8000/test?testingIsFun=true`, `localhost:8000/report?coldWeather=yes`. Replace the string you were `console.log`-ing in the previous step and instead log an object with the query string parameters. Your code should not use anything beyond `req.url` and should instead rely on parsing data _from_ the `req.url` string.
+- Open a browser and navigate to `localhost:8000/test?testingIsFun=Sometimes not always&skiingIsFun=Always`. Notice how the URL changed in the address bar.
+- Modify `url-two.query` to output `{testingIsFun: "Sometimes not always", skiingIsFun: "Always"}`
+- Add and commit your work.
 
-    For the first example it would look like `{testingIsFun: 'true'}` (do not worry about data types for now). Make a commit with this.
-  1. Next, try a more complex query string, here is the test cases, can you construct other similar ones? Be sure to copy and paste them into chrome as they appear here (the spaces matter!):
-
-    * `localhost:8000/test?testingIsFun=Sometimes not always`
-    * `localhost:8000/test?testingIsFun=Spaces are <so cool>`
-
-    remember to commit the result before moving on.
-
-  1. Next, try a more complex query string, here is the test cases, can you construct other similar ones? Be sure to copy and paste them into chrome as they appear here (the spaces matter!):
-
-    * `localhost:8000/test?testingIsFun=Sometimes not always&skiingIsFun=Always` with output: `{testingIsFun: "Sometimes not always", skiingIsFun: "Always"}`
-
-    remember to commit before moving on.
-
-  1. Read about [`url.parse`](https://nodejs.org/api/url.html#url_url_parse_urlstr_parsequerystring_slashesdenotehost) and refactor your code to use it. You may need to search beyond the documentation to get a good understanding of how to use this. Commit this.
-
-As mentioned before, HTTP is a String-based protocol. Due to this, an [encoding](https://en.wikipedia.org/wiki/Percent-encoding) strategy is required so that the machines can properly handle special characters that may otherwise be used in the protocol specification. The exercise you just completed handles the other side of the coin; URL decoding.
-
-#### The next level
-
-If you want to take this exercise to the next level, make the URL parser developed in the first 4 experiments work with data types.
-
-## Reflect: Self-asses
-
-Go to the "Objectives" section of this README. Go through each one and ask yourself:
-
-- Have I completed this objective?
-- What concrete evidence do I have that I've completed the objective?
-
-Go to the "Key Terms" section of this README. For each word, ask yourself:
-
-- What is my explanation for this term?
-
-If you haven't completed an objective, or you can't define a term, take a few minutes to try to fill in any gaps.
-
-## Reflect: Ask new questions
-
-What new questions do you have now that you've gone through this exercise?
-
-List at least 4 here:
-
-1. 
-1. 
-1. 
-1. 
+#### Step 4: `url.parse`
+The fourth step is refactor your work and [`url.parse`](https://nodejs.org/api/url.html#url_url_parse_urlstr_parsequerystring_slashesdenotehost).
