@@ -1,10 +1,13 @@
 var http = require('http');
 
-var handleRequest = function (req, res) {
-  if (req.url == '/favicon.ico') return res.end();
+var server = null;
 
-  res.end('Strings are so cool! But this string will be replaced as you experiment!');
+function handleRequest(req, res) {  
+  res.end("This is where you'll be experimenting");
 };
 
-var server = http.createServer(handleRequest);
-server.listen(8000);
+server = http.createServer(handleRequest);
+
+server.listen(8000, function() {
+	console.log("Listening on PORT 8000...");
+});
