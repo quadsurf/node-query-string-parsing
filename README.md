@@ -1,11 +1,8 @@
 # node-url-parsing
-Parsing URLs is a fundamental process of web servers. In regards to Node.js, you have the option to manually parse a URL with the `req.url` property or require [`Node's url module`](https://www.npmjs.com/package/url). To gain an appreciation and understanding of the `url` module, which offers many conveniences, we're going to use `req.url`re-implement two of its most common properties:
-
-- pathname
-- query
+Parsing URLs is a fundamental process of web servers. In regards to Node.js, you have the option to manually parse a URL with `req.url` or Node's [`url`](https://www.npmjs.com/package/url) module. For this exercise, we're going to use the former appraoch first; then we'll refactor our code to use the latter.
 
 ## Setup
-This exercise will involve your HTTP server to be frequently restarted. Rather than manually doing this, we're going to automate this process using [`nodemon`](https://www.npmjs.com/package/nodemon).
+This exercise will require your HTTP server to be frequently restarted. Rather than manually doing this, we're going to automate this process with [`nodemon`](https://www.npmjs.com/package/nodemon).
 
 To install nodemon, type the following command into your terminal:
 
@@ -20,17 +17,19 @@ A lot of experimentation will be performed during this exercise. Since the focus
 nodemon server.js
 ```
 
+Then open your browser to [localhost:8000](http://localhost:8000/).
+
 As you complete each of the following steps, add and commit your work to Github.
 
 #### Step 1: `pathname`
-The first step is to experiment with the path of a URL. In [`server.js`](server.js), pass an argument of [`req.url`](https://nodejs.org/api/http.html#http_message_url) to `res.end()`.
+The first step is to experiment with the path of a URL. In [`server.js`](server.js), pass [`req.url`](https://nodejs.org/api/http.html#http_message_url) as an argument of `res.end()`.
 
-- Open a browser and navigate to `localhost:8000`. Notice the output.
-- Change the URL in the address bar of your web browser to a different URL, such as `localhost:8000/foo`. View the output displayed in your browser.
-- Notice that adding a query string will display the path and the query string.
-- Create an object named `url-two`; then  add a property named `pathname`. 
+- Change the URL in your browser's address to a different URL, such as `localhost:8000/foo`. 
+- Notice that the text in your browser has changed from `/` to `/foo`. 
+- Navigate to another URL and add a query string to that URL.
+- In `server.js`, create an object named `url-two` and add a property named `pathname`.
 - Replace `res.end(req.url)` with `res.end(url-two.pathname)`
-- If your browser displays the path of a url, then everything works. `localhost:8000/bar?name=batman`, for instance, would return "/bar"
+- Assign to `url-two.pathname` just the path in `req.url`. For instance, `req.url` would return `/bar?name=batman` in `localhost:8000/bar?name=batman`. Your implementation of `url-two.pathname` should return just `/bar`.
 - Add and commit to Github your changes in `server.js`.
 
 #### Step 2: `query`
@@ -45,9 +44,9 @@ The second step is to experiment with the [query string](https://en.wikipedia.or
 #### Step 3: `query` with encoded URL 
 The third step is to experiment with an encoded URL and query strings. 
 
-- Open a browser and navigate to `localhost:8000/test?testingIsFun=Sometimes not always&skiingIsFun=Always`. Notice how the URL changed in the address bar.
-- Modify `url-two.query` to output `{testingIsFun: "Sometimes not always", skiingIsFun: "Always"}`
-- Add and commit your work.
+- In server.js, replace `url-two.pathname` with `req.url`.
+- Open your browser to [`localhost:8000/test?testingIsFun=Sometimes not always&skiingIsFun=Always`](`http://localhost:8000/test?testingIsFun=Sometimes not always&skiingIsFun=Always`). Notice how the URL changed in the address bar. Also, there's some encoding happening in the URL.
+- Define `url-two.query` and have it be assigned to an object with the query string names as keys and values as values. Here's an example output: `{testingIsFun: "Sometimes not always", skiingIsFun: "Always"}`. 
 
 #### Step 4: `url.parse`
-The fourth step is refactor your work and [`url.parse`](https://nodejs.org/api/url.html#url_url_parse_urlstr_parsequerystring_slashesdenotehost).
+The fourth step is refactor your work with the [`url`](https://www.npmjs.com/package/url) module. You'lll need to require it in `server.js` and then install it with `npm`. Also, focus your attention on the property [`url.parse`](https://nodejs.org/api/url.html#url_url_parse_urlstr_parsequerystring_slashesdenotehost).
