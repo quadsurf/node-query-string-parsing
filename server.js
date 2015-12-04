@@ -2,7 +2,8 @@ var http = require('http');
 
 var server = null;
 
-function handleRequest(req, res) {  
+function handleRequest(req, res) {
+  res.setHeader("Content-Type", "text/plain");  
   res.end("This is where you'll be experimenting");
 };
 
